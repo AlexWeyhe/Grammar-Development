@@ -1,0 +1,33 @@
+#TESTSUITE DUTCH PROJECT
+
+Marie slaapt niet lang. (1 0.003 14)
+
+Pieter eet geen koekje. (1 0 15)
+
+Niemand loopt langzaam. (1 0 12)
+
+De grote vrouw eet de smakelijke koekjes. (1 0.004 22)
+
+Neem het grote boek! (1 0 14)
+
+Niemand leest mijn boek. (1 0.004 14)
+
+Pieter eet een groot, smakelijk koekje. (1 0 22)
+
+# Non-parsable sentences.
+
+# Missing noun with the negation 'geen'.
+
+Jij drinkt geen. (0 0.004 7)
+
+# Incorrect use of 'niemand' for negating a verb; should be 'niet'.
+
+Marie slaapt niemand. (0 0 0)
+
+# Worng position of 'niet'; should be close to the verb.
+
+Hij loopt snel niet. (0 0 0)
+
+# Incorrect form of both adjectives for neuter singular.
+
+Wij drinken een smakelijke, rode sap. (0 0 17)

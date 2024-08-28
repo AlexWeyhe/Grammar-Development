@@ -1,0 +1,340 @@
+DEMO	DUTCH	CONFIG (1.0)
+  ROOTCAT	ROOT.
+  FILES	.
+  LEXENTRIES	(DEMO DUTCH).
+  TEMPLATES	(DEMO DUTCH).
+  RULES		(DEMO DUTCH).
+  MORPHOLOGY (DEMO DUTCH).
+  GOVERNABLERELATIONS    SUBJ OBJ.
+  SEMANTICFUNCTIONS    ADJUNCT POSS STANDARD.
+  NONDISTRIBUTIVES    NUM PERS CONJ-FORM.
+  EPSILON   e.
+  OPTIMALITYORDER NOGOOD.
+
+----
+
+DEMO DUTCH MORPHOLOGY (1.0)
+
+TOKENIZE:
+P!basic-parse-tok.fst G!default-gen-tokenizer.fst
+
+----
+
+DEMO DUTCH	RULES (1.0)
+   ROOT --> {S | Simp}. 
+
+   Simp --> e: (^SUBJ PRED) = 'pro'
+	           (^SUBJ PERS) = 2; 
+ 	           VP
+ 	           EXCL.  "obligatory exclamation mark"
+
+   S --> NP: (^SUBJ)=!
+	         (!CASE)=nom;
+ 	         VP
+		     (PERIOD).
+
+   VP --> V: ^=!;		   
+		   (NEG: (^NEG) = +
+		   		 (!NEGTYPE) =c verb)		"Here we define that in a VP we DO NOT allow the negation word 'geen'."
+		   ADVP*: !$ (^ADJUNCT);		   
+		   (NP: (^OBJ)=!).                 	   
+
+   NP --> {
+			({NEG: (^NEG) = +
+				   (!NEGTYPE) =c noun 	 "Here we constrict that in a NP we can only have the negation word 'geen'."
+			|
+			DET: ^=! 
+			  @ADJ-AGR					"Applying adjective agreement for the noun."
+			|
+			PRON})			
+ 	  		AP*: !$ (^ADJUNCT)
+			@ADJ-AGR;					"Applying adjective agreement for the adjective."
+			N
+			|
+			PRON: (^NEG) = +			"Constriction to allow only for 'niemand' (nobody); a pronoun that negates."
+			}. 
+
+   AP --> ADV*: !$ (^ADJUNCT);
+             A
+             (COMMA).
+
+   ADVP --> ADV
+			(COMMA).
+----
+
+DEMO DUTCH TEMPLATES (1.0)
+
+INTRANS(P) = (^PRED) = 'P<(^SUBJ)>'.
+
+TRANS(P) = (^PRED) = 'P<(^SUBJ) (^OBJ)>'.
+
+OPT-TRANS(P) = {@(TRANS P) | @(INTRANS P)}.
+
+PRED(P) = (^ PRED) = 'P'. 
+
+NAME(P G) = @(PRED P)
+	        (^GEN) = G
+			(^NUM) = sg
+	        (^PERS) = 3
+	        (^NTYPE) = name.
+
+"Template for count nouns"
+COUNT-NOUN(P G N) = @(PRED P)
+				  (^GEND) = G
+                  (^NUM) = N
+                  (^PERS) = 3
+                  (^NTYPE) = count.
+
+GEND(G) = (^GEND) = G. 
+
+NUM(N) = (^NUM) = N. 
+
+ADJ(P) = 	(^PRED) = 'P'
+	  		(^ATYPE) = attributive.
+
+"making sure that the adjective is in its correct form for the noun"
+ ADJ-AGR = (^DEF) = (!DEF)   
+	  	   (^GEND) = (!GEND).
+
+ADJ-NEUTER = @(GEND neut)	"the gender of the noun is neuter"
+			 @(NUM sg)		"and the number is singular"
+			 (^DEF) = -.	"and the article is indefinite: een groot huis (huis is neuter)"
+
+ADJ-FEM-MASC = {(^DEF) = - 	"the determiner is indefinite"
+			  @(NUM sg)		"the number of the noun is singular"
+			{ @(GEND masc)	"and the gender is either feminine or masculine"
+			| @(GEND fem)}	"een grote deur (deur is fem) -> a big door."
+			| 
+			  (^DEF) = +	"if the determiner is definite"
+			{ @(GEND masc)	"the gender does not matter"
+			| @(GEND fem)	"de grote deur (the big door) and het grote huis (the big house)."
+			| @(GEND neut)}
+			}.
+
+"Template for pronouns"
+PRON(P Z N T) = @(PRED P)
+	              (^NUM) = N
+	              (^PERS) = Z
+	              (^PRON-TYPE) = T
+	              (^NTYPE) = pron.
+
+"Template only for possesive pronouns"
+POSS-PRON(P N Z) = (^POSS PRED) = 'P'    
+                   (^POSS NUM) = N
+	                 (^POSS PERS) = Z
+	                 (^POSS PRON-TYPE) = poss
+	                 (^POSS NTYPE) = pron.
+
+----
+
+DEMO DUTCH LEXICON (1.0)
+
+"PROPER NOUNS"
+Marie	N* 	@(NAME Marie fem).
+
+Pieter 	N*	@(NAME Pieter masc).
+
+"NOUNS"
+
+vrouw	   N*	@(COUNT-NOUN woman fem sg).
+
+vrouwen N*    @(COUNT-NOUN women fem pl).
+
+huis 	N*	  @(COUNT-NOUN house neut sg).
+
+huizen 	N*	  @(COUNT-NOUN houses neut pl).
+
+koekje N*	@(COUNT-NOUN cookie neut sg).
+
+koekjes N*	@(COUNT-NOUN cookies neut pl).
+
+sap N*	@(COUNT-NOUN juice neut sg).
+
+boek	N*	@(COUNT-NOUN book neut sg).
+
+boeken	N*	@(COUNT-NOUN books neut pl).
+
+"VERBS"
+
+slaapt	V* @(INTRANS sleep)
+	   (^Tense) = pres
+	   (^MOOD) = indicative
+	   (^SUBJ NUM) = sg
+	   {(^SUBJ PERS) = 2
+	   | (^SUBJ PERS) = 3}.
+
+slapen  V* @(INTRANS sleep)
+	   (^Tense) = pres
+	   (^MOOD) = indicative
+	   (^SUBJ NUM) = pl.
+
+"The verb 'eten' (to eat) has the same form for all singulars."
+eet V* @(OPT-TRANS eat)
+	   (^Tense) = pres
+	   (^MOOD) = indicative
+	   (^SUBJ NUM) = sg.
+
+eten V* @(OPT-TRANS eat)
+	   (^Tense) = pres
+	   (^MOOD) = indicative
+	   (^SUBJ NUM) = pl.
+
+drinkt V* @(OPT-TRANS drink)
+		  (^Tense) = pres
+	      (^MOOD) = indicative
+	      (^SUBJ NUM) = sg
+	      {(^SUBJ PERS) = 2
+	      | (^SUBJ PERS) = 3}.
+
+drinken	V* @(OPT-TRANS eat)
+	       (^Tense) = pres
+	       (^MOOD) = indicative
+	       (^SUBJ NUM) = pl.
+
+Neem	V*	@(TRANS take)
+			(^Tense) = pres
+			(^SUBJ NUM) = sg
+			(^MODD) = imperative
+			(^SUBJ PERS) = 2.
+
+lopen 	V* @(INTRANS walk)
+	   		(^Tense) = pres
+	   		(^MOOD) = indicative
+	   		(^SUBJ NUM) = pl.
+
+loopt  V* @(INTRANS walk)
+	   		(^Tense) = pres
+	   		(^MOOD) = indicative
+	   		(^SUBJ NUM) = sg
+	   		{(^SUBJ PERS) = 2
+	   		| (^SUBJ PERS) = 3}.
+
+lezen	V*	@(OPT-TRANS read)
+	    	(^Tense) = pres
+	    	(^MOOD) = indicative
+	    	(^SUBJ NUM) = pl.
+
+leest 	V*	@(OPT-TRANS read)
+			(^Tense) = pres
+	   		(^MOOD) = indicative
+	   		(^SUBJ NUM) = sg
+	   		{(^SUBJ PERS) = 2
+	   		| (^SUBJ PERS) = 3}.
+
+"ADJECTIVES"
+groot 	A*	@(ADJ big)
+			@ADJ-NEUTER.
+
+grote	A*	@(ADJ big)
+			@ADJ-FEM-MASC.
+
+smakelijk A* @(ADJ tasty)
+			@ADJ-NEUTER.
+
+smakelijke A* @(ADJ tasty)
+			  @ADJ-FEM-MASC.
+
+rood	A* 	@(ADJ red)
+			@ADJ-NEUTER.
+
+rode	A*	@(ADJ red)
+			  @ADJ-FEM-MASC.
+ 
+"ADVERBS"
+
+lang	ADV*	@(PRED long).
+
+snel	ADV*	@(PRED quickly).
+
+langzaam	ADV*	@(PRED slowly).
+
+
+"ARTICLES"
+
+De   DET*	(^DEF) = +
+			{{(^GEND) = masc 
+			| (^GEND) = fem}
+			|
+			 (^GEND) = neut
+			 (^NUM) = pl}.
+
+de   DET*	(^DEF) = +
+			{{(^GEND) = masc 
+			| (^GEND) = fem}
+			|
+			(^GEND) = neut
+			(^NUM) = pl}.
+
+Het DET*   (^DEF) = +
+    	   (^GEND) = neut
+		   (^NUM) = sg.
+
+het DET*   (^DEF) = +
+    	   (^GEND) = neut
+		   (^NUM) = sg.
+
+een DET*	(^DEF) = -
+			(^NUM) = sg.
+
+"NEGATION"
+
+geen	NEG*	(^NEG) = +
+				(^NEGTYPE) = noun.
+
+Geen 	NEG*	(^NEG) = +
+				(^NEGTYPE) = noun.
+
+niet NEG*	(^NEG) = +
+			(^NEGTYPE) = verb.
+
+"NEGATING PRONOUNS"
+
+Niemand PRON*	@(PRED nobody)
+				(^NUM) = sg
+	            (^PERS) = 3
+				(^NEG) = +
+				(^NEGTYPE) = pron.
+
+niemand PRON*	@(PRED nobody)
+				(^NUM) = sg
+	            (^PERS) = 3
+				(^NEG) = +
+				(^NEGTYPE) = pron.
+
+"PRONOUNS"
+
+Jij	PRON*	@(PRON you 2 sg pers).
+
+jij	PRON*	@(PRON you 2 sg pers).
+
+Hij PRON*	@(PRON he 3 sg pers).
+
+hij	PRON*	@(PRON he 3 sg pers).
+
+Zij	PRON*	@(PRON she 3 sg pers).
+
+zij	PRON*	@(PRON she 3 sg pers).
+
+Jullie	PRON*	@(PRON you 2 pl pers).
+
+jullie	PRON*	@(PRON you 2 pl pers).
+
+Wij		PRON*	@(PRON we 1 pl pers).
+
+wij		PRON*	@(PRON we 1 pl pers).
+
+mijn	PRON* @(POSS-PRON I sg 1).
+
+Zijn	PRON* @(POSS-PRON his sg 3).
+
+Haar	PRON* @(POSS-PRON her sg 3).
+
+
+"PUNCTUATION"
+
+. PERIOD*  (^STMT-TYPE) = declarative.
+
+, COMMA* .
+
+! EXCL*  (^STMT-TYPE) = exclamation.
+----
