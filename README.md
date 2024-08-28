@@ -33,9 +33,9 @@ For this grammar there are plenty of remaining challenges. First of all, since I
 
 ## Files included in the project
 <div align="justify">
-The only file that were included in this project were *basic-parse-tok.fst* and *default-gen-tokenizer.fst*. These two files allowed to work with punctuation in my grammar which was necessary especially for parsing imperative sentences with an obligatory exclamation mark at the end. Other files have not been included since the grammar is very basic and more files were not needed for it. 
+The only file that were included in this project were "basic-parse-tok.fst" and "default-gen-tokenizer.fst". These two files allowed to work with punctuation in my grammar which was necessary especially for parsing imperative sentences with an obligatory exclamation mark at the end. Other files have not been included since the grammar is very basic and more files were not needed for it. 
 </p>
 
 
 ## Bibliography
-Nora Kassner & Heinrich Schütze (2020). "Negated and Misprimed Probes for Pretrained Language Models: Birds Can Talk, But Cannot Fly." In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics*, pp. 7811–7818, Online. Association for Computational Linguistics. DOI: 10.18653/v1/2020.acl-main.698.
+Nora Kassner & Heinrich Schütze (2020). "Negated and Misprimed Probes for Pretrained Language Models: Birds Can Talk, But Cannot Fly." In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics*, pp. 7811–7818, Online. Association for Computational Linguistics.
