@@ -29,3 +29,13 @@ For the implementation for the adjective-noun agreement I first created three te
 <p align="justify">
 For this grammar there are plenty of remaining challenges. First of all, since I worked on the grammar on my own and started from scratch, the grammar is very basic and can only parse rudimentary sentences. One challenge would be to expand this grammar: adding Prepositional Phrases, Indirect Objects, Complementizer Phrases (with a verb-final structure), or implementing the verb-second rule etc. With regard to negation, there is also plenty of room for improvement. We can add more negating words such as: niets ("nothing"), nooit ("never"), nergens ("nowhere"), or constrcutions such as "noch ... noch" ("neither ... nor"). We can explore more and different postions of the negating words within the phrase structure. As we can see, there is a lot work needed to improve this grammar. The idea of this project was to start from the beginning and build a rather basic foundation which one could enhance. 
 </p>
+
+
+## Files included in the project
+<div align="justify">
+The only file that were included in this project were *basic-parse-tok.fst* and *default-gen-tokenizer.fst*. These two files allowed to work with punctuation in my grammar which was necessary especially for parsing imperative sentences with an obligatory exclamation mark at the end. Other files have not been included since the grammar is very basic and more files were not needed for it. 
+</p>
+
+
+## Bibliography
+Nora Kassner & Heinrich Schütze (2020). "Negated and Misprimed Probes for Pretrained Language Models: Birds Can Talk, But Cannot Fly." In *Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics*, pp. 7811–7818, Online. Association for Computational Linguistics. DOI: 10.18653/v1/2020.acl-main.698.
